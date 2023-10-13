@@ -249,5 +249,15 @@ module.exports = {
         ON u.country_id = c.country_id
         WHERE u.country_id = ${countryId};
         `).then(dbRes => res.status(200).send(dbRes[0]))
+    },
+
+    delteCity: (req, res) => {
+
+        const {cityId} = req.params
+
+        sequelize.query(`
+        DELETE FROM cities
+        WHERE city_id = ${+cityId};
+        `).then(dbRes => res.status(200).send(dbRes[0]));
     }
 }
