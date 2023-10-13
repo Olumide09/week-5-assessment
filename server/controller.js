@@ -4,6 +4,9 @@ const Sequelize = require('sequelize')
 
 const sequelize = new Sequelize(process.env.CONNECTION_STRING)
 
+const countryId = 1;
+const cityId = 1;
+
 module.exports = {
     seed: (req, res) => {
         sequelize.query(`
@@ -236,6 +239,15 @@ module.exports = {
         INSERT INTO cities (country_id, name, rating)
         VALUES (${countryId}, '${name}', ${rating})
         RETURNING *;
+        `).then(dbRes => res.status(200).send(dbRes[0]))
+    },
+
+    getCities: (req, res) => {
+        sequelize.query(`
+        SELECT * FROM cities AS c
+        JOIN countries AS u
+        ON u.country_id = c.country_id
+        WHERE u.country_id = ${countryId};
         `).then(dbRes => res.status(200).send(dbRes[0]))
     }
 }
